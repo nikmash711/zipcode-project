@@ -25,8 +25,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    zipInformation(country: String!, zipCode: String!): ZipInformation
-    countries: [Country]
+    zipInformation(country: String!, zipCode: String!): ZipInformation!
+    countries: [Country!]!
   }
 
   type Country {

@@ -23,8 +23,8 @@ export type Country = {
 
 export type Query = {
   __typename?: 'Query';
-  countries?: Maybe<Array<Maybe<Country>>>;
-  zipInformation?: Maybe<ZipInformation>;
+  countries: Array<Country>;
+  zipInformation: ZipInformation;
 };
 
 
@@ -45,12 +45,12 @@ export type ZipInformationQueryVariables = Exact<{
 }>;
 
 
-export type ZipInformationQuery = { __typename?: 'Query', zipInformation?: { __typename?: 'ZipInformation', state: string, city: string } | null };
+export type ZipInformationQuery = { __typename?: 'Query', zipInformation: { __typename?: 'ZipInformation', state: string, city: string } };
 
 export type CountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CountriesQuery = { __typename?: 'Query', countries?: Array<{ __typename?: 'Country', name: string, code: string } | null> | null };
+export type CountriesQuery = { __typename?: 'Query', countries: Array<{ __typename?: 'Country', name: string, code: string }> };
 
 
 export const ZipInformationDocument = gql`
