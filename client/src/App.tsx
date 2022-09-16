@@ -16,10 +16,15 @@ import {
   ZipInformation,
 } from './utils/__generated__/graphql';
 
+const searchHistoryKey = 'searchHistory';
+
 export const App: React.FC = () => {
   // State
   const [selectedCountry, setSelectedCountry] = useState('US');
   const [selectedZipCode, setSelectedZipCode] = useState('');
+  const [searchHistory, setSearchHistory] = useState<ZipInformation[] | null>(
+    store.get(searchHistoryKey)
+  );
 
   // onChange handlers
   const handleCountryChange = (event: SelectChangeEvent) => {
@@ -28,6 +33,13 @@ export const App: React.FC = () => {
 
   const handleZipCodeChange = (event: any) => {
     setSelectedZipCode(event.target.value as string);
+  };
+
+  const handleClearSearchHistory = () => {
+    // Update state.
+    setSearchHistory(null);
+    // Update the store.
+    store.set(searchHistoryKey, null);
   };
 
   // Queries
@@ -58,31 +70,32 @@ export const App: React.FC = () => {
     });
     // TODO If there's an error - handle it and return out of fn
 
-    // Keep track of search history using local storage.
     if (zipInformationData?.zipInformation) {
-      let searchHistoryFromStore: ZipInformation[] | null =
-        store.get('searchHistory');
-      // If we already have search history in the store, let's update it.
-      if (searchHistoryFromStore) {
-        // If the length of the search history is already 5, remove the oldest (first) search/
-        if (searchHistoryFromStore.length === 5) {
-          searchHistoryFromStore.shift();
+      // If we already have search history, let's update it.
+      if (searchHistory) {
+        let searchHistoryCopy = [...searchHistory];
+        // If the length of the search history is already 5, remove the oldest (first) search.
+        if (searchHistoryCopy.length === 5) {
+          searchHistoryCopy.shift();
         }
         // Add the most recent search.
-        searchHistoryFromStore.push(zipInformationData.zipInformation);
-        store.set('searchHistory', searchHistoryFromStore);
+        searchHistoryCopy.push(zipInformationData.zipInformation);
+
+        // Update store and update state.
+        setSearchHistory(searchHistoryCopy);
+        store.set(searchHistoryKey, searchHistoryCopy);
       }
       // If we don't, let's create and set search history.
       else {
         let searchHistory = [zipInformationData.zipInformation];
-        store.set('searchHistory', searchHistory);
+        setSearchHistory(searchHistory);
+        store.set(searchHistoryKey, searchHistory);
       }
     }
   };
 
   const showLoading = loadingCountriesData || !listOfCountries;
   const showError = errorCountriesData;
-  const searchHistory: ZipInformation[] | null = store.get('searchHistory');
 
   // Put search history in array, and then list the array backwards (so most recent searches are first)
 
@@ -122,8 +135,17 @@ export const App: React.FC = () => {
       </Button>
       <div>City: {zipInformationData?.zipInformation?.city}</div>
       <div>State: {zipInformationData?.zipInformation?.state}</div>
-      {searchHistory &&
-        searchHistory.map((searchItem) => <div>{searchItem.state}</div>)}
+      {searchHistory && searchHistory.length > 0 && (
+        <>
+          {/* Reverse the array so we're showing the newest searches first like a stack */}
+          {searchHistory.reverse().map((searchItem) => (
+            <div>{searchItem.city}</div>
+          ))}
+          <Button onClick={handleClearSearchHistory} variant="contained">
+            Clear Search History
+          </Button>
+        </>
+      )}
     </>
   ) : null;
 };
