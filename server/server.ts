@@ -25,7 +25,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    zipInformation(country: String!, zipCode: String!): ZipInformation!
+    zipInformation(country: String!, zipCode: String!): ZipInformation
     countries: [Country!]!
   }
 
@@ -118,13 +118,16 @@ const resolvers = {
       await axios
         .get(`http://api.zippopotam.us/${country}/${zipCode}`)
         .then(({ data }: ZippopotamType) => {
+          console.log('HERE1');
           const city = data.places[0]['place name'];
           const state = data.places[0]['state'];
           return { city, state };
         })
-        .catch((error: Error) => {
-          console.log(error);
-          // TODO - Do something with error - a toast?
+        .catch((_error: Error) => {
+          console.log('HERE2');
+          return new Error(
+            'There was an error with your request. Please try putting in a valid zip code for the selected country.'
+          );
         }),
     countries: () => countries,
   },

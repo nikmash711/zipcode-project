@@ -5,22 +5,16 @@ import {
   InputLabel,
   FormControl,
   SelectChangeEvent,
+  Button,
 } from '@mui/material';
 import React, { useState } from 'react';
 
 import {
   useCountriesQuery,
-  useZipInformationQuery,
+  useZipInformationLazyQuery,
 } from './utils/__generated__/graphql';
 
 export const App: React.FC = () => {
-  const {
-    loading: loadingZipInformation,
-    error: errorZipInformation,
-    data: zipInformationData,
-  } = useZipInformationQuery({
-    variables: { country: 'us', zipCode: '91403' },
-  });
   const {
     loading: loadingCountriesData,
     error: errorCountriesData,
@@ -33,24 +27,38 @@ export const App: React.FC = () => {
     setSelectedCountry(event.target.value as string);
   };
 
-  const [zipCode, setZipCode] = useState('');
+  const [selectedZipCode, setSelectedZipCode] = useState('');
   const handleZipCodeChange = (event: any) => {
-    setZipCode(event.target.value as string);
+    setSelectedZipCode(event.target.value as string);
   };
 
-  const showLoading =
-    loadingZipInformation || loadingCountriesData || !listOfCountries;
-  const showError = errorCountriesData || errorZipInformation;
+  const [
+    getZipInformation,
+    {
+      loading: loadingZipInformation,
+      error: errorZipInformation,
+      data: zipInformationData,
+    },
+  ] = useZipInformationLazyQuery();
+
+  const onSubmit = () => {
+    getZipInformation({
+      variables: { country: selectedCountry, zipCode: selectedZipCode },
+    });
+  };
+
+  const showLoading = loadingCountriesData || !listOfCountries;
+  const showError = errorCountriesData;
+  console.log(zipInformationData);
 
   // TODO: add loading state
-  // TODO: add error state
+  // TODO: add error state - what if it's the wrong zipcode?
   return showLoading ? (
     <div>loading</div>
   ) : showError ? (
     <div>error</div>
   ) : listOfCountries ? (
     <>
-      {' '}
       <FormControl fullWidth>
         <InputLabel id="select-country-label">Countries</InputLabel>
         <Select
@@ -71,9 +79,12 @@ export const App: React.FC = () => {
         id="outlined-basic"
         label="Zip Code"
         variant="outlined"
-        value={zipCode}
+        value={selectedZipCode}
         onChange={handleZipCodeChange}
       />
+      <Button onClick={onSubmit} variant="contained">
+        Get City and State
+      </Button>
     </>
   ) : null;
 };

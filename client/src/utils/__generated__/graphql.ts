@@ -24,7 +24,7 @@ export type Country = {
 export type Query = {
   __typename?: 'Query';
   countries: Array<Country>;
-  zipInformation: ZipInformation;
+  zipInformation?: Maybe<ZipInformation>;
 };
 
 
@@ -45,7 +45,7 @@ export type ZipInformationQueryVariables = Exact<{
 }>;
 
 
-export type ZipInformationQuery = { __typename?: 'Query', zipInformation: { __typename?: 'ZipInformation', state: string, city: string } };
+export type ZipInformationQuery = { __typename?: 'Query', zipInformation?: { __typename?: 'ZipInformation', state: string, city: string } | null };
 
 export type CountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
