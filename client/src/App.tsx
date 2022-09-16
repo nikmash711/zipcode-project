@@ -1,8 +1,13 @@
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import {
+  MenuItem,
+  Select,
+  TextField,
+  InputLabel,
+  FormControl,
+  SelectChangeEvent,
+} from '@mui/material';
 import React, { useState } from 'react';
+
 import {
   useCountriesQuery,
   useZipInformationQuery,
@@ -23,9 +28,14 @@ export const App: React.FC = () => {
   } = useCountriesQuery();
   const listOfCountries = countriesData?.countries;
 
-  const [selectedCountry, setSelectedCountry] = useState<string>('US');
+  const [selectedCountry, setSelectedCountry] = useState('US');
   const handleCountryChange = (event: SelectChangeEvent) => {
     setSelectedCountry(event.target.value as string);
+  };
+
+  const [zipCode, setZipCode] = useState('');
+  const handleZipCodeChange = (event: any) => {
+    setZipCode(event.target.value as string);
   };
 
   const showLoading =
@@ -39,21 +49,31 @@ export const App: React.FC = () => {
   ) : showError ? (
     <div>error</div>
   ) : listOfCountries ? (
-    <FormControl fullWidth>
-      <InputLabel id="select-country-label">Countries</InputLabel>
-      <Select
-        labelId="select-country-label"
-        id="select-country-label"
-        value={selectedCountry}
-        label="Age"
-        onChange={handleCountryChange}
-      >
-        {listOfCountries?.map((country) => (
-          <MenuItem key={country.code} value={country.code}>
-            {country.name}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <>
+      {' '}
+      <FormControl fullWidth>
+        <InputLabel id="select-country-label">Countries</InputLabel>
+        <Select
+          labelId="select-country-label"
+          id="select-country-label"
+          value={selectedCountry}
+          label="Age"
+          onChange={handleCountryChange}
+        >
+          {listOfCountries?.map((country) => (
+            <MenuItem key={country.code} value={country.code}>
+              {country.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <TextField
+        id="outlined-basic"
+        label="Zip Code"
+        variant="outlined"
+        value={zipCode}
+        onChange={handleZipCodeChange}
+      />
+    </>
   ) : null;
 };
