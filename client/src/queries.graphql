@@ -4,3 +4,10 @@ query ZipInformation($country: String!, $zipCode: String!) {
     city
   }
 }
+
+query countries {
+  countries {
+    name
+    code
+  }
+}

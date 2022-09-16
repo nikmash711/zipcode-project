@@ -1,10 +1,15 @@
 import React from 'react';
-import { useZipInformationQuery } from './utils/__generated__/graphql';
+import {
+  useCountriesQuery,
+  useZipInformationQuery,
+} from './utils/__generated__/graphql';
 
 export const App: React.FC = () => {
   const { loading, error, data } = useZipInformationQuery({
     variables: { country: 'us', zipCode: '91403' },
   });
+  const { data: countriesData } = useCountriesQuery();
+  console.log(countriesData);
 
   // TODO: add loading state
   // TODO: add error state
@@ -13,6 +18,8 @@ export const App: React.FC = () => {
   ) : error ? (
     <div>hi</div>
   ) : (
-    <div>{data?.zipInformation?.city}</div>
+    <>
+      <div>{data?.zipInformation?.city}</div>
+    </>
   );
 };
