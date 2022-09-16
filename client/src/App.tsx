@@ -1,14 +1,7 @@
-import {
-  MenuItem,
-  Select,
-  TextField,
-  InputLabel,
-  FormControl,
-  SelectChangeEvent,
-  Button,
-} from '@mui/material';
 import React, { useState } from 'react';
 import store from 'store2';
+import { Form } from './components/Form';
+import { SearchHistory } from './components/SearchHistory';
 
 import {
   useCountriesQuery,
@@ -18,22 +11,12 @@ import {
 
 const searchHistoryKey = 'searchHistory';
 
+// TODO interface for state
 export const App: React.FC = () => {
   // State
-  const [selectedCountry, setSelectedCountry] = useState('US');
-  const [selectedZipCode, setSelectedZipCode] = useState('');
   const [searchHistory, setSearchHistory] = useState<ZipInformation[] | null>(
     store.get(searchHistoryKey)
   );
-
-  // onChange handlers
-  const handleCountryChange = (event: SelectChangeEvent) => {
-    setSelectedCountry(event.target.value as string);
-  };
-
-  const handleZipCodeChange = (event: any) => {
-    setSelectedZipCode(event.target.value as string);
-  };
 
   const handleClearSearchHistory = () => {
     // Update state.
@@ -60,13 +43,13 @@ export const App: React.FC = () => {
   ] = useZipInformationLazyQuery();
 
   // Submit form fn
-  const onSubmit = async () => {
+  const handleSubmit = async (country: string, zipCode: string) => {
     const {
-      loading: loadingZipInformation,
+      loading: loadingZipInformation, // TODO: disable submit while loading;
       error: errorZipInformation,
       data: zipInformationData,
     } = await getZipInformation({
-      variables: { country: selectedCountry, zipCode: selectedZipCode },
+      variables: { country, zipCode },
     });
     // TODO If there's an error - handle it and return out of fn
 
@@ -79,7 +62,10 @@ export const App: React.FC = () => {
           searchHistoryCopy.shift();
         }
         // Add the most recent search.
-        searchHistoryCopy.push(zipInformationData.zipInformation);
+        searchHistoryCopy = [
+          ...searchHistoryCopy,
+          zipInformationData.zipInformation,
+        ];
 
         // Update store and update state.
         setSearchHistory(searchHistoryCopy);
@@ -97,8 +83,6 @@ export const App: React.FC = () => {
   const showLoading = loadingCountriesData || !listOfCountries;
   const showError = errorCountriesData;
 
-  // Put search history in array, and then list the array backwards (so most recent searches are first)
-
   // TODO: add loading state
   // TODO: add error state - what if it's the wrong zipcode?
   return showLoading ? (
@@ -106,46 +90,23 @@ export const App: React.FC = () => {
   ) : showError ? (
     <div>error</div>
   ) : listOfCountries ? (
-    <>
-      <FormControl fullWidth>
-        <InputLabel id="select-country-label">Countries</InputLabel>
-        <Select
-          labelId="select-country-label"
-          id="select-country-label"
-          value={selectedCountry}
-          label="Age"
-          onChange={handleCountryChange}
-        >
-          {listOfCountries?.map((country) => (
-            <MenuItem key={country.code} value={country.code}>
-              {country.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <TextField
-        id="outlined-basic"
-        label="Zip Code"
-        variant="outlined"
-        value={selectedZipCode}
-        onChange={handleZipCodeChange}
+    <div>
+      <Form
+        error={errorZipInformation?.message}
+        listOfCountries={listOfCountries}
+        onSubmit={handleSubmit}
       />
-      <Button onClick={onSubmit} variant="contained">
-        Get City and State
-      </Button>
+      <br />
       <div>City: {zipInformationData?.zipInformation?.city}</div>
       <div>State: {zipInformationData?.zipInformation?.state}</div>
+      <br />
       {searchHistory && searchHistory.length > 0 && (
-        <>
-          {/* Reverse the array so we're showing the newest searches first like a stack */}
-          {searchHistory.reverse().map((searchItem) => (
-            <div>{searchItem.city}</div>
-          ))}
-          <Button onClick={handleClearSearchHistory} variant="contained">
-            Clear Search History
-          </Button>
-        </>
+        <SearchHistory
+          // Reverse the array so we're showing the newest searches first like a stack
+          searchHistory={[...searchHistory].reverse()}
+          handleClearSearchHistory={handleClearSearchHistory}
+        />
       )}
-    </>
+    </div>
   ) : null;
 };

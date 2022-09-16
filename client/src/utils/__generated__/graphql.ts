@@ -37,6 +37,7 @@ export type ZipInformation = {
   __typename?: 'ZipInformation';
   city: Scalars['String'];
   state: Scalars['String'];
+  zipCode: Scalars['String'];
 };
 
 export type ZipInformationQueryVariables = Exact<{
@@ -45,7 +46,7 @@ export type ZipInformationQueryVariables = Exact<{
 }>;
 
 
-export type ZipInformationQuery = { __typename?: 'Query', zipInformation?: { __typename?: 'ZipInformation', state: string, city: string } | null };
+export type ZipInformationQuery = { __typename?: 'Query', zipInformation?: { __typename?: 'ZipInformation', state: string, city: string, zipCode: string } | null };
 
 export type CountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -58,6 +59,7 @@ export const ZipInformationDocument = gql`
   zipInformation(country: $country, zipCode: $zipCode) {
     state
     city
+    zipCode
   }
 }
     `;

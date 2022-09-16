@@ -2,6 +2,7 @@ query ZipInformation($country: String!, $zipCode: String!) {
   zipInformation(country: $country, zipCode: $zipCode) {
     state
     city
+    zipCode
   }
 }
 

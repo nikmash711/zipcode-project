@@ -22,6 +22,7 @@ const typeDefs = gql`
   type ZipInformation {
     city: String!
     state: String!
+    zipCode: String!
   }
 
   type Query {
@@ -121,12 +122,13 @@ const resolvers = {
           console.log(data);
           const city = data.places[0]['place name'];
           const state = data.places[0]['state'];
-          return { city, state };
+          const zipCode = data['post code'];
+          return { city, state, zipCode };
         })
         .catch((_error: Error) => {
           console.log('HERE2');
           return new Error(
-            'There was an error with your request. Please try putting in a valid zip code for the selected country.'
+            'There was an error with your request. Please type a valid zip code for the selected country.'
           );
         }),
     countries: () => countries,
