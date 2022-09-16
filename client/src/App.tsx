@@ -8,29 +8,35 @@ import {
   Button,
 } from '@mui/material';
 import React, { useState } from 'react';
+import store from 'store2';
 
 import {
   useCountriesQuery,
   useZipInformationLazyQuery,
+  ZipInformation,
 } from './utils/__generated__/graphql';
 
 export const App: React.FC = () => {
+  // State
+  const [selectedCountry, setSelectedCountry] = useState('US');
+  const [selectedZipCode, setSelectedZipCode] = useState('');
+
+  // onChange handlers
+  const handleCountryChange = (event: SelectChangeEvent) => {
+    setSelectedCountry(event.target.value as string);
+  };
+
+  const handleZipCodeChange = (event: any) => {
+    setSelectedZipCode(event.target.value as string);
+  };
+
+  // Queries
   const {
     loading: loadingCountriesData,
     error: errorCountriesData,
     data: countriesData,
   } = useCountriesQuery();
   const listOfCountries = countriesData?.countries;
-
-  const [selectedCountry, setSelectedCountry] = useState('US');
-  const handleCountryChange = (event: SelectChangeEvent) => {
-    setSelectedCountry(event.target.value as string);
-  };
-
-  const [selectedZipCode, setSelectedZipCode] = useState('');
-  const handleZipCodeChange = (event: any) => {
-    setSelectedZipCode(event.target.value as string);
-  };
 
   const [
     getZipInformation,
@@ -41,15 +47,44 @@ export const App: React.FC = () => {
     },
   ] = useZipInformationLazyQuery();
 
-  const onSubmit = () => {
-    getZipInformation({
+  // Submit form fn
+  const onSubmit = async () => {
+    const {
+      loading: loadingZipInformation,
+      error: errorZipInformation,
+      data: zipInformationData,
+    } = await getZipInformation({
       variables: { country: selectedCountry, zipCode: selectedZipCode },
     });
+    // TODO If there's an error - handle it and return out of fn
+
+    // Keep track of search history using local storage.
+    if (zipInformationData?.zipInformation) {
+      let searchHistoryFromStore: ZipInformation[] | null =
+        store.get('searchHistory');
+      // If we already have search history in the store, let's update it.
+      if (searchHistoryFromStore) {
+        // If the length of the search history is already 5, remove the oldest (first) search/
+        if (searchHistoryFromStore.length === 5) {
+          searchHistoryFromStore.shift();
+        }
+        // Add the most recent search.
+        searchHistoryFromStore.push(zipInformationData.zipInformation);
+        store.set('searchHistory', searchHistoryFromStore);
+      }
+      // If we don't, let's create and set search history.
+      else {
+        let searchHistory = [zipInformationData.zipInformation];
+        store.set('searchHistory', searchHistory);
+      }
+    }
   };
 
   const showLoading = loadingCountriesData || !listOfCountries;
   const showError = errorCountriesData;
-  console.log(zipInformationData);
+  const searchHistory: ZipInformation[] | null = store.get('searchHistory');
+
+  // Put search history in array, and then list the array backwards (so most recent searches are first)
 
   // TODO: add loading state
   // TODO: add error state - what if it's the wrong zipcode?
@@ -85,6 +120,10 @@ export const App: React.FC = () => {
       <Button onClick={onSubmit} variant="contained">
         Get City and State
       </Button>
+      <div>City: {zipInformationData?.zipInformation?.city}</div>
+      <div>State: {zipInformationData?.zipInformation?.state}</div>
+      {searchHistory &&
+        searchHistory.map((searchItem) => <div>{searchItem.state}</div>)}
     </>
   ) : null;
 };

@@ -118,7 +118,7 @@ const resolvers = {
       await axios
         .get(`http://api.zippopotam.us/${country}/${zipCode}`)
         .then(({ data }: ZippopotamType) => {
-          console.log('HERE1');
+          console.log(data);
           const city = data.places[0]['place name'];
           const state = data.places[0]['state'];
           return { city, state };
