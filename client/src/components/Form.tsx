@@ -70,7 +70,8 @@ export const Form: React.FC<FormProps> = ({
         variant="contained"
         type="submit"
         fullWidth
-        disabled={isDisabled}
+        // Don't allow the user to submit an empty zip.
+        disabled={isDisabled || !selectedZipCode.trim()}
       >
         Get City and State
       </Button>
