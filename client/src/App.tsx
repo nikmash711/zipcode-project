@@ -43,15 +43,18 @@ export const App: React.FC = () => {
   ] = useZipInformationLazyQuery();
 
   // Submit form fn
-  const handleSubmit = async (country: string, zipCode: string) => {
+  const handleSubmit = async (
+    event: React.MouseEvent,
+    country: string,
+    zipCode: string
+  ) => {
+    event.preventDefault();
     const {
       loading: loadingZipInformation, // TODO: disable submit while loading;
-      error: errorZipInformation,
       data: zipInformationData,
     } = await getZipInformation({
       variables: { country, zipCode },
     });
-    // TODO If there's an error - handle it and return out of fn
 
     if (zipInformationData?.zipInformation) {
       // If we already have search history, let's update it.
@@ -92,6 +95,7 @@ export const App: React.FC = () => {
   ) : listOfCountries ? (
     <div>
       <Form
+        isDisabled={loadingZipInformation || loadingCountriesData}
         error={errorZipInformation?.message}
         listOfCountries={listOfCountries}
         onSubmit={handleSubmit}

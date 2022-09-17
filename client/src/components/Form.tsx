@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client';
 import {
   MenuItem,
   Select,
@@ -13,12 +12,14 @@ import { Country } from '../utils/__generated__/graphql';
 
 interface FormProps {
   error?: string;
+  isDisabled?: boolean;
   listOfCountries: Country[];
-  onSubmit: (country: string, zipCode: string) => void;
+  onSubmit: (event: React.MouseEvent, country: string, zipCode: string) => void;
 }
 
 export const Form: React.FC<FormProps> = ({
   error,
+  isDisabled,
   listOfCountries,
   onSubmit,
 }) => {
@@ -34,7 +35,7 @@ export const Form: React.FC<FormProps> = ({
     setSelectedZipCode(event.target.value as string);
   };
   return (
-    <div>
+    <form>
       <FormControl fullWidth>
         <InputLabel id="select-country-label">Countries</InputLabel>
         <Select
@@ -43,6 +44,7 @@ export const Form: React.FC<FormProps> = ({
           value={selectedCountry}
           label="Age"
           onChange={handleCountryChange}
+          disabled={isDisabled}
         >
           {listOfCountries?.map((country) => (
             <MenuItem key={country.code} value={country.code}>
@@ -60,14 +62,18 @@ export const Form: React.FC<FormProps> = ({
           onChange={handleZipCodeChange}
           error={!!error}
           helperText={error}
+          disabled={isDisabled}
         />
       </FormControl>
       <Button
-        onClick={() => onSubmit(selectedCountry, selectedZipCode)}
+        onClick={(event) => onSubmit(event, selectedCountry, selectedZipCode)}
         variant="contained"
+        type="submit"
+        fullWidth
+        disabled={isDisabled}
       >
         Get City and State
       </Button>
-    </div>
+    </form>
   );
 };
