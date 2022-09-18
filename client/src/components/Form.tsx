@@ -44,6 +44,7 @@ export const Form: React.FC<FormProps> = ({
             <Select
               labelId="select-country-label"
               id="select-country-label"
+              inputProps={{ 'data-testid': 'select-country-label' }}
               value={selectedCountry}
               label="Age"
               onChange={handleCountryChange}
@@ -61,6 +62,7 @@ export const Form: React.FC<FormProps> = ({
           <FormControl fullWidth disabled={isDisabled}>
             <TextField
               id="zipcode-label"
+              inputProps={{ 'data-testid': 'zipcode-label' }}
               placeholder="Type your postal code here"
               label="Postal Code"
               variant="outlined"
@@ -82,6 +84,7 @@ export const Form: React.FC<FormProps> = ({
             fullWidth
             // Don't allow the user to submit an empty zip.
             disabled={isDisabled || !selectedZipCode.trim()}
+            data-testid="submit-button"
           >
             Get Location
           </Button>
