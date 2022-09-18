@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, List, ListItem } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,12 +13,14 @@ export const SearchHistory: React.FC<SearchHistoryProps> = ({
   searchHistory,
   handleClearSearchHistory,
 }) => (
-  <div>
-    {searchHistory.map((searchItem) => (
-      <div key={uuidv4()} style={{ paddingBottom: 8 }}>
-        {searchItem.city}, {searchItem.state}, {searchItem.zipCode}
-      </div>
-    ))}
+  <>
+    <List>
+      {searchHistory.map((searchItem) => (
+        <ListItem key={uuidv4()} disablePadding style={{ paddingBottom: 8 }}>
+          {searchItem.city}, {searchItem.state}, {searchItem.zipCode}
+        </ListItem>
+      ))}
+    </List>
     <Button
       onClick={handleClearSearchHistory}
       variant="contained"
@@ -27,5 +29,5 @@ export const SearchHistory: React.FC<SearchHistoryProps> = ({
     >
       Clear History
     </Button>
-  </div>
+  </>
 );

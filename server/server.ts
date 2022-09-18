@@ -119,7 +119,6 @@ const resolvers = {
       await axios
         .get(`http://api.zippopotam.us/${country}/${zipCode}`)
         .then(async ({ data }: ZippopotamType) => {
-          console.log(data);
           // This is assuming there's only one response - there could be more from the
           // API, but for this app's simplicity we just take the first.
           const city = data.places[0]['place name'];

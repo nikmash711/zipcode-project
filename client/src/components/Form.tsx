@@ -1,14 +1,15 @@
 import {
+  Button,
+  FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
-  TextField,
-  InputLabel,
-  FormControl,
   SelectChangeEvent,
-  Button,
+  TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
+
 import { Country } from 'utils/__generated__/graphql';
 
 interface FormProps {

@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import ReactDOM from 'react-dom/client';
 
 import { LocationApp } from 'components/LocationApp';

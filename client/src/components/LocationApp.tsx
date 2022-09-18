@@ -1,6 +1,12 @@
-import { CircularProgress, Divider, Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import PlaceIcon from '@mui/icons-material/Place';
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Divider,
+  Typography,
+} from '@mui/material';
+import { blue } from '@mui/material/colors';
 import React, { useState } from 'react';
 import store from 'store2';
 
@@ -85,13 +91,13 @@ export const LocationApp: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 500,
+    <Box
+      sx={{
+        maxWidth: '500px',
         margin: 'auto',
-        border: '1px solid black',
-        borderRadius: 16,
-        padding: 20,
+        borderRadius: '16px',
+        border: `2px solid black`,
+        padding: '32px',
       }}
     >
       <Typography variant="h5" style={{ marginBottom: 24 }}>
@@ -99,10 +105,15 @@ export const LocationApp: React.FC = () => {
       </Typography>
       {loadingCountriesData ? (
         <CircularProgress sx={{ display: 'block', margin: 'auto' }} />
+      ) : errorCountriesData ? (
+        <Alert severity="error">
+          There was an error loading a list of countries from the API. Please
+          try again later.
+        </Alert>
       ) : listOfCountries ? (
         <Form
-          isDisabled={loadingZipInformation || loadingCountriesData}
           error={errorZipInformation?.message}
+          isDisabled={loadingZipInformation || loadingCountriesData}
           listOfCountries={listOfCountries}
           onSubmit={handleSubmitForm}
         />
@@ -119,7 +130,7 @@ export const LocationApp: React.FC = () => {
       {searchHistory && searchHistory.length > 0 && (
         <>
           <Divider sx={{ margin: '24px 0' }} />
-          <Typography variant="h5" style={{ marginBottom: 12 }}>
+          <Typography variant="h5" style={{ marginBottom: 8 }}>
             Recent Search History:
           </Typography>
           <SearchHistory
@@ -129,6 +140,6 @@ export const LocationApp: React.FC = () => {
           />
         </>
       )}
-    </div>
+    </Box>
   );
 };

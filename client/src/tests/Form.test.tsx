@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/react';
+
 import { Form } from 'components/Form';
 
 describe('Form component', () => {
@@ -36,7 +37,6 @@ describe('Form component', () => {
       />
     );
     const submitBtn = getByTestId('submit-button');
-    console.log(submitBtn);
     expect(submitBtn).toHaveClass('Mui-disabled');
   });
 
