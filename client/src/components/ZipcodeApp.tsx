@@ -1,34 +1,26 @@
-import { Divider, Typography } from '@mui/material';
+import { CircularProgress, Divider, Typography } from '@mui/material';
+import { blue } from '@mui/material/colors';
 import PlaceIcon from '@mui/icons-material/Place';
 import React, { useState } from 'react';
 import store from 'store2';
-import { Form } from './Form';
-import { SearchHistory } from './SearchHistory';
 
+import { Form } from 'components/Form';
+import { SearchHistory } from 'components/SearchHistory';
 import {
   useCountriesQuery,
   useZipInformationLazyQuery,
   ZipInformation,
-} from '../utils/__generated__/graphql';
-import { blue } from '@mui/material/colors';
+} from 'utils/__generated__/graphql';
 
 const searchHistoryKey = 'searchHistory';
 
-// TODO interface for state
 export const App: React.FC = () => {
-  // State
+  // State:
   const [searchHistory, setSearchHistory] = useState<ZipInformation[] | null>(
     store.get(searchHistoryKey)
   );
 
-  const handleClearSearchHistory = () => {
-    // Update state.
-    setSearchHistory(null);
-    // Update the store.
-    store.set(searchHistoryKey, null);
-  };
-
-  // Queries
+  // Queries:
   const {
     loading: loadingCountriesData,
     error: errorCountriesData,
@@ -44,18 +36,24 @@ export const App: React.FC = () => {
       data: zipInformationData,
     },
   ] = useZipInformationLazyQuery();
+  const zipInformation = zipInformationData?.zipInformation;
 
-  // Submit form fn
-  const handleSubmit = async (
+  // Handlers:
+
+  const handleClearSearchHistory = () => {
+    // Update state.
+    setSearchHistory(null);
+    // Update the store.
+    store.set(searchHistoryKey, null);
+  };
+
+  const handleSubmitForm = async (
     event: React.MouseEvent,
     country: string,
     zipCode: string
   ) => {
     event.preventDefault();
-    const {
-      loading: loadingZipInformation, // TODO: disable submit while loading;
-      data: zipInformationData,
-    } = await getZipInformation({
+    const { data: zipInformationData } = await getZipInformation({
       variables: { country, zipCode },
     });
 
@@ -86,16 +84,7 @@ export const App: React.FC = () => {
     }
   };
 
-  const showLoading = loadingCountriesData || !listOfCountries;
-  const showError = errorCountriesData;
-
-  // TODO: add loading state
-  // TODO: add error state - what if it's the wrong zipcode?
-  return showLoading ? (
-    <div>loading</div>
-  ) : showError ? (
-    <div>error</div>
-  ) : listOfCountries ? (
+  return (
     <div
       style={{
         maxWidth: 500,
@@ -106,27 +95,30 @@ export const App: React.FC = () => {
       }}
     >
       <Typography variant="h5" style={{ marginBottom: 24 }}>
-        Find Your City and State From Your Zipcode!
+        Find Your Location
       </Typography>
-      <Form
-        isDisabled={loadingZipInformation || loadingCountriesData}
-        error={errorZipInformation?.message}
-        listOfCountries={listOfCountries}
-        onSubmit={handleSubmit}
-      />
+      {loadingCountriesData ? (
+        <CircularProgress sx={{ display: 'block', margin: 'auto' }} />
+      ) : listOfCountries ? (
+        <Form
+          isDisabled={loadingZipInformation || loadingCountriesData}
+          error={errorZipInformation?.message}
+          listOfCountries={listOfCountries}
+          onSubmit={handleSubmitForm}
+        />
+      ) : null}
       <br />
-      {zipInformationData?.zipInformation && (
+      {zipInformation && (
         <Typography variant="h6" align="center" gutterBottom color={blue[700]}>
           <PlaceIcon style={{ verticalAlign: 'sub' }} />{' '}
           <span>
-            {zipInformationData.zipInformation.city},{' '}
-            {zipInformationData.zipInformation.state}
+            {zipInformation.city}, {zipInformation.state}
           </span>
         </Typography>
       )}
-      <Divider sx={{ margin: '24px 0' }} />
       {searchHistory && searchHistory.length > 0 && (
         <>
+          <Divider sx={{ margin: '24px 0' }} />
           <Typography variant="h5" style={{ marginBottom: 12 }}>
             Recent Search History:
           </Typography>
@@ -138,5 +130,5 @@ export const App: React.FC = () => {
         </>
       )}
     </div>
-  ) : null;
+  );
 };

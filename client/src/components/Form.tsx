@@ -9,7 +9,7 @@ import {
   Button,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { Country } from '../utils/__generated__/graphql';
+import { Country } from 'utils/__generated__/graphql';
 
 interface FormProps {
   error?: string;
@@ -39,7 +39,7 @@ export const Form: React.FC<FormProps> = ({
     <form>
       <Grid container alignItems="flex-start" spacing={4}>
         <Grid item xs={12}>
-          <FormControl fullWidth>
+          <FormControl fullWidth disabled={isDisabled}>
             <InputLabel id="select-country-label">Countries</InputLabel>
             <Select
               labelId="select-country-label"
@@ -58,11 +58,11 @@ export const Form: React.FC<FormProps> = ({
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <FormControl fullWidth>
+          <FormControl fullWidth disabled={isDisabled}>
             <TextField
               id="zipcode-label"
-              placeholder="Type your zipcode here"
-              label="Zip Code"
+              placeholder="Type your postal code here"
+              label="Postal Code"
               variant="outlined"
               value={selectedZipCode}
               onChange={handleZipCodeChange}
@@ -83,7 +83,7 @@ export const Form: React.FC<FormProps> = ({
             // Don't allow the user to submit an empty zip.
             disabled={isDisabled || !selectedZipCode.trim()}
           >
-            Get City and State
+            Get Location
           </Button>
         </Grid>
       </Grid>

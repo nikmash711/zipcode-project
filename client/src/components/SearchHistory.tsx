@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ZipInformation } from '../utils/__generated__/graphql';
+import { ZipInformation } from 'utils/__generated__/graphql';
 
 interface SearchHistoryProps {
   searchHistory: ZipInformation[];
@@ -16,13 +16,14 @@ export const SearchHistory: React.FC<SearchHistoryProps> = ({
   <div>
     {searchHistory.map((searchItem) => (
       <div key={uuidv4()} style={{ paddingBottom: 8 }}>
-        {searchItem.city}
+        {searchItem.city}, {searchItem.state}, {searchItem.zipCode}
       </div>
     ))}
     <Button
       onClick={handleClearSearchHistory}
       variant="contained"
       color="success"
+      fullWidth
     >
       Clear History
     </Button>

@@ -118,20 +118,33 @@ const resolvers = {
     ) =>
       await axios
         .get(`http://api.zippopotam.us/${country}/${zipCode}`)
-        .then(({ data }: ZippopotamType) => {
+        .then(async ({ data }: ZippopotamType) => {
           console.log(data);
+          // This is assuming there's only one response - there could be more from the
+          // API, but for this app's simplicity we just take the first.
           const city = data.places[0]['place name'];
           const state = data.places[0]['state'];
           const zipCode = data['post code'];
+          // Intentionally adding a sleep here to demonstrate what would happen
+          // if the wait time was longer. This is for UI purposes for this assignment,
+          // and not something I would actually do in production!
+          await new Promise((resolve) => setTimeout(resolve, 500));
           return { city, state, zipCode };
         })
+        // This is also an assumption for the app's simplicity - there could be an
+        // actual error from the API.
         .catch((_error: Error) => {
-          console.log('HERE2');
           return new Error(
-            'There was an error with your request. Please type a valid zip code for the selected country.'
+            'Please type a valid postal code for the selected country.'
           );
         }),
-    countries: () => countries,
+    countries: async () => {
+      // Intentionally adding a sleep here to demonstrate what would happen
+      // if the wait time was longer. This is for UI purposes for this assignment,
+      // and not something I would actually do in production!
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      return countries;
+    },
   },
 };
 
