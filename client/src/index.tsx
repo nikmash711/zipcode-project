@@ -1,9 +1,7 @@
-import ReactDOM from 'react-dom/client';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-import { App } from './components/ZipcodeApp';
-import './index.css';
+import { LocationApp } from 'components/LocationApp';
 
 const client = new ApolloClient({
   uri: 'http://localhost:9000/',
@@ -16,6 +14,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <ApolloProvider client={client}>
-    <App />
+    <LocationApp />
   </ApolloProvider>
 );

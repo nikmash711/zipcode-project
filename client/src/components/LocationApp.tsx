@@ -14,7 +14,7 @@ import {
 
 const searchHistoryKey = 'searchHistory';
 
-export const App: React.FC = () => {
+export const LocationApp: React.FC = () => {
   // State:
   const [searchHistory, setSearchHistory] = useState<ZipInformation[] | null>(
     store.get(searchHistoryKey)
