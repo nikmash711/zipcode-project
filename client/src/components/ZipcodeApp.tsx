@@ -1,13 +1,16 @@
+import { Divider, Typography } from '@mui/material';
+import PlaceIcon from '@mui/icons-material/Place';
 import React, { useState } from 'react';
 import store from 'store2';
-import { Form } from './components/Form';
-import { SearchHistory } from './components/SearchHistory';
+import { Form } from './Form';
+import { SearchHistory } from './SearchHistory';
 
 import {
   useCountriesQuery,
   useZipInformationLazyQuery,
   ZipInformation,
-} from './utils/__generated__/graphql';
+} from '../utils/__generated__/graphql';
+import { blue } from '@mui/material/colors';
 
 const searchHistoryKey = 'searchHistory';
 
@@ -93,7 +96,18 @@ export const App: React.FC = () => {
   ) : showError ? (
     <div>error</div>
   ) : listOfCountries ? (
-    <div>
+    <div
+      style={{
+        maxWidth: 500,
+        margin: 'auto',
+        border: '1px solid black',
+        borderRadius: 16,
+        padding: 20,
+      }}
+    >
+      <Typography variant="h5" style={{ marginBottom: 24 }}>
+        Find Your City and State From Your Zipcode!
+      </Typography>
       <Form
         isDisabled={loadingZipInformation || loadingCountriesData}
         error={errorZipInformation?.message}
@@ -101,15 +115,27 @@ export const App: React.FC = () => {
         onSubmit={handleSubmit}
       />
       <br />
-      <div>City: {zipInformationData?.zipInformation?.city}</div>
-      <div>State: {zipInformationData?.zipInformation?.state}</div>
-      <br />
+      {zipInformationData?.zipInformation && (
+        <Typography variant="h6" align="center" gutterBottom color={blue[700]}>
+          <PlaceIcon style={{ verticalAlign: 'sub' }} />{' '}
+          <span>
+            {zipInformationData.zipInformation.city},{' '}
+            {zipInformationData.zipInformation.state}
+          </span>
+        </Typography>
+      )}
+      <Divider sx={{ margin: '24px 0' }} />
       {searchHistory && searchHistory.length > 0 && (
-        <SearchHistory
-          // Reverse the array so we're showing the newest searches first like a stack
-          searchHistory={[...searchHistory].reverse()}
-          handleClearSearchHistory={handleClearSearchHistory}
-        />
+        <>
+          <Typography variant="h5" style={{ marginBottom: 12 }}>
+            Recent Search History:
+          </Typography>
+          <SearchHistory
+            // Reverse the array so we're showing the newest searches first like a stack
+            searchHistory={[...searchHistory].reverse()}
+            handleClearSearchHistory={handleClearSearchHistory}
+          />
+        </>
       )}
     </div>
   ) : null;

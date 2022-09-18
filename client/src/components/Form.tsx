@@ -1,4 +1,5 @@
 import {
+  Grid,
   MenuItem,
   Select,
   TextField,
@@ -36,45 +37,56 @@ export const Form: React.FC<FormProps> = ({
   };
   return (
     <form>
-      <FormControl fullWidth>
-        <InputLabel id="select-country-label">Countries</InputLabel>
-        <Select
-          labelId="select-country-label"
-          id="select-country-label"
-          value={selectedCountry}
-          label="Age"
-          onChange={handleCountryChange}
-          disabled={isDisabled}
-        >
-          {listOfCountries?.map((country) => (
-            <MenuItem key={country.code} value={country.code}>
-              {country.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth>
-        <TextField
-          id="outlined-basic"
-          label="Zip Code"
-          variant="outlined"
-          value={selectedZipCode}
-          onChange={handleZipCodeChange}
-          error={!!error}
-          helperText={error}
-          disabled={isDisabled}
-        />
-      </FormControl>
-      <Button
-        onClick={(event) => onSubmit(event, selectedCountry, selectedZipCode)}
-        variant="contained"
-        type="submit"
-        fullWidth
-        // Don't allow the user to submit an empty zip.
-        disabled={isDisabled || !selectedZipCode.trim()}
-      >
-        Get City and State
-      </Button>
+      <Grid container alignItems="flex-start" spacing={4}>
+        <Grid item xs={12}>
+          <FormControl fullWidth>
+            <InputLabel id="select-country-label">Countries</InputLabel>
+            <Select
+              labelId="select-country-label"
+              id="select-country-label"
+              value={selectedCountry}
+              label="Age"
+              onChange={handleCountryChange}
+              disabled={isDisabled}
+            >
+              {listOfCountries?.map((country) => (
+                <MenuItem key={country.code} value={country.code}>
+                  {country.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl fullWidth>
+            <TextField
+              id="zipcode-label"
+              placeholder="Type your zipcode here"
+              label="Zip Code"
+              variant="outlined"
+              value={selectedZipCode}
+              onChange={handleZipCodeChange}
+              error={!!error}
+              helperText={error}
+              disabled={isDisabled}
+            />
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            onClick={(event) =>
+              onSubmit(event, selectedCountry, selectedZipCode)
+            }
+            variant="contained"
+            type="submit"
+            fullWidth
+            // Don't allow the user to submit an empty zip.
+            disabled={isDisabled || !selectedZipCode.trim()}
+          >
+            Get City and State
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 };

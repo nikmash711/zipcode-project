@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import React from 'react';
 
-import { App } from './App';
+import { App } from './components/ZipcodeApp';
 import './index.css';
 
 const client = new ApolloClient({

@@ -15,10 +15,16 @@ export const SearchHistory: React.FC<SearchHistoryProps> = ({
 }) => (
   <div>
     {searchHistory.map((searchItem) => (
-      <div key={uuidv4()}>{searchItem.city}</div>
+      <div key={uuidv4()} style={{ paddingBottom: 8 }}>
+        {searchItem.city}
+      </div>
     ))}
-    <Button onClick={handleClearSearchHistory} variant="contained">
-      Clear Search History
+    <Button
+      onClick={handleClearSearchHistory}
+      variant="contained"
+      color="success"
+    >
+      Clear History
     </Button>
   </div>
 );
