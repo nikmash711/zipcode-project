@@ -30,13 +30,7 @@ npm run test
 Note to reviewer:
 This was my first time using MaterialUI and ApolloServer (I’ve used Apollo on the FE, but not BE). And it’s been almost 4 years since I’ve written in Node.JS :) So if any of those parts look rusty or don’t match up with best practices, that’ll be why!
 
-## Screenshots
-
-![Screenshot of location app](screenshots/location-app-ui.png 'Optional Title')
-
-![Screenshot of location app with error](screenshots/location-app-ui-with-error.png 'Optional Title')
-
-## What I could improve with more time:
+## What I would improve with more time:
 
 1. Cleaner and nicer UI (fonts, colors, etc)
 2. Autocomplete suggestions for the postal code for better UX
@@ -44,3 +38,9 @@ This was my first time using MaterialUI and ApolloServer (I’ve used Apollo on 
 4. Add a linter
 5. More robust error handling
 6. Replace inline styles with css modules (MaterialUI was overriding them when I tried to use css modules and I didn’t want to go too many another rabbit holes for time’s sake since I went down a couple other ones already :P)
+
+## Screenshots
+
+![Screenshot of location app](screenshots/location-app-ui.png 'Optional Title')
+
+![Screenshot of location app with error](screenshots/location-app-ui-with-error.png 'Optional Title')
