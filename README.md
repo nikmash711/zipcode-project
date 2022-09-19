@@ -35,16 +35,16 @@ npm run check-types
 ```
 
 Note to reviewer:
-This was my first time using MaterialUI and ApolloServer (I’ve used Apollo on the FE, but not BE). And it’s been almost 4 years since I’ve written in Node.JS. So if any of those parts look rusty or don’t align with best practices, that’ll be why :)
+This was my first time using MaterialUI and ApolloServer (I’ve used Apollo on the FE, but not BE). And it’s been almost 4 years since I’ve written in Node.JS. So if any of those parts don’t align with best practices, that’ll be why :)
 
 ## What I would improve with more time:
 
 1. Cleaner and nicer UI (fonts, colors, etc)
 2. Autocomplete suggestions for the postal code for better UX
-3. Modularize the code in server.ts into schema, query, and resolver files
+3. Modularize the code in `server.ts` into schema, query, and resolver files
 4. Add a linter
 5. More robust error handling
-6. Focus on the postal code element when the page loads, and after form submits as well so user can type again.
+6. Focus on the postal code element when the page loads, and after form submits as well so user can type again
 7. Replace inline styles with css modules (MaterialUI was overriding them when I tried to use css modules and I didn’t want to go too many another rabbit holes for time’s sake since I went down a couple other ones already :P)
 
 ## Screenshots
