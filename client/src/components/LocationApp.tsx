@@ -17,6 +17,7 @@ import {
   useZipInformationLazyQuery,
   ZipInformation,
 } from 'utils/__generated__/graphql';
+import styles from 'styles/index.module.css';
 
 const searchHistoryKey = 'searchHistory';
 
@@ -121,7 +122,7 @@ export const LocationApp: React.FC = () => {
       <br />
       {zipInformation && (
         <Typography variant="h6" align="center" gutterBottom color={blue[700]}>
-          <PlaceIcon style={{ verticalAlign: 'sub' }} />{' '}
+          <PlaceIcon className={styles.placeIcon} />{' '}
           <span>
             {zipInformation.city}, {zipInformation.state}
           </span>
