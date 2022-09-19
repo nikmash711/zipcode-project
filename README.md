@@ -1,7 +1,8 @@
 # Location App
 
-This web app allows users to find out their city and state after selecting a country and inputting a postal code from [this API](http://www.zippopotam.us/).
-It also maintains a search history stack of the last 5 searches, which they can clear if they wish to.
+This web app allows users to find out their city and state after selecting a country and inputting a postal code using [this API](http://www.zippopotam.us/).
+
+It also maintains a search history stack of the last 5 searches, which the user can clear if they wish to.
 
 To run the client, navigate to the client folder and run:
 
@@ -34,7 +35,7 @@ npm run check-types
 ```
 
 Note to reviewer:
-This was my first time using MaterialUI and ApolloServer (I’ve used Apollo on the FE, but not BE). And it’s been almost 4 years since I’ve written in Node.JS :) So if any of those parts look rusty or don’t match up with best practices, that’ll be why!
+This was my first time using MaterialUI and ApolloServer (I’ve used Apollo on the FE, but not BE). And it’s been almost 4 years since I’ve written in Node.JS. So if any of those parts look rusty or don’t align with best practices, that’ll be why :)
 
 ## What I would improve with more time:
 
