@@ -36,7 +36,7 @@ const typeDefs = gql`
   }
 `;
 
-// Hard-coded this because the API doesn't return it.
+// Chose to hard-code this since the API doesn't return it.
 const countries = [
   { name: 'Andorra', code: 'AD' },
   { name: 'Argentina', code: 'AR' },
@@ -119,8 +119,9 @@ const resolvers = {
       await axios
         .get(`http://api.zippopotam.us/${country}/${zipCode}`)
         .then(async ({ data }: ZippopotamType) => {
-          // This is assuming there's only one response - there could be more from the
-          // API, but for this app's simplicity we just take the first.
+          // This is assuming there's only one - there could
+          // be more from the API, but for this app's simplicity we
+          // just take the first.
           const city = data.places[0]['place name'];
           const state = data.places[0]['state'];
           const zipCode = data['post code'];
@@ -130,10 +131,10 @@ const resolvers = {
           await new Promise((resolve) => setTimeout(resolve, 500));
           return { city, state, zipCode };
         })
-        // This is also an assumption for the app's simplicity - there could be an
-        // actual error from the API.
         .catch((_error: Error) => {
           return new Error(
+            // This is also an assumption for the app's simplicity - there could be an
+            // actual error from the API.
             'Please type a valid postal code for the selected country.'
           );
         }),

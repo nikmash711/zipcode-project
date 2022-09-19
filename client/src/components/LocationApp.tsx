@@ -135,7 +135,7 @@ export const LocationApp: React.FC = () => {
             Recent Search History:
           </Typography>
           <SearchHistory
-            // Reverse the array so we're showing the newest searches first like a stack
+            // Reverse the array so we're showing the newest searches first.
             searchHistory={[...searchHistory].reverse()}
             handleClearSearchHistory={handleClearSearchHistory}
           />

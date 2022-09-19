@@ -29,13 +29,14 @@ export const Form: React.FC<FormProps> = ({
   const [selectedCountry, setSelectedCountry] = useState('US');
   const [selectedZipCode, setSelectedZipCode] = useState('');
 
-  // onChange handlers
+  // Handler fns:
   const handleCountryChange = (event: SelectChangeEvent) => {
-    setSelectedCountry(event.target.value as string);
+    setSelectedCountry(event.target.value);
   };
-  const handleZipCodeChange = (event: any) => {
-    setSelectedZipCode(event.target.value as string);
+  const handleZipCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedZipCode(event.target.value);
   };
+
   return (
     <form>
       <Grid container alignItems="flex-start" spacing={4}>
@@ -51,7 +52,7 @@ export const Form: React.FC<FormProps> = ({
               onChange={handleCountryChange}
               disabled={isDisabled}
             >
-              {listOfCountries?.map((country) => (
+              {listOfCountries.map((country) => (
                 <MenuItem key={country.code} value={country.code}>
                   {country.name}
                 </MenuItem>
